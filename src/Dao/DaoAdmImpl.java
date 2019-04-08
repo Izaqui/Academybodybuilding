@@ -7,7 +7,6 @@ package Dao;
 
 
 import Entidades.Administrador;
-import Entidades.Aluno;
 import Interfaces.IDaoAdministrador;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,13 +16,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author kiel
  */
 public class DaoAdmImpl implements IDaoAdministrador {
+    
     private final File arquivo;
     
     Administrador administrador;
@@ -44,43 +42,30 @@ public class DaoAdmImpl implements IDaoAdministrador {
     }
 
     @Override
-    public boolean addAdministrador(Administrador adm) {
+    public boolean addAdministrador(Administrador adm) throws IOException, ClassNotFoundException{
            List<Administrador> listaAdministrador = null;        
-        
-        if (arquivo.length() > 0) {
-            ObjectInputStream in = null;
-               try {
-                   in = new ObjectInputStream(
-                           new FileInputStream(arquivo));
-               } catch (IOException ex) {
-                   Logger.getLogger(DaoAdmImpl.class.getName()).log(Level.SEVERE, null, ex);
-               }
+           
+           if (arquivo.length() > 0) {
+            ObjectInputStream in = new ObjectInputStream(
+                    new FileInputStream(arquivo));
 
-               try {
-                   listaAdministrador = (List<Administrador>) in.readObject();
-               } catch (IOException ex) {
-                   Logger.getLogger(DaoAdmImpl.class.getName()).log(Level.SEVERE, null, ex);
-               } catch (ClassNotFoundException ex) {
-                   Logger.getLogger(DaoAdmImpl.class.getName()).log(Level.SEVERE, null, ex);
-               }
+            listaAdministrador = (List<Administrador>) in.readObject();
         } else {
             listaAdministrador = new ArrayList<>();
         }
         
         for(Administrador a : listaAdministrador){
-            if(a.getEmail().equals(administrador.getEmail())){
+            if(a.getEmail().equals(adm.getEmail())){
                 return false;
             }
         }
         
        
-        if (listaAdministrador.add(administrador)) {
+        if (listaAdministrador.add(adm)) {
             try (ObjectOutputStream out = new ObjectOutputStream(
                     new FileOutputStream(arquivo))) {
                 out.writeObject(listaAdministrador);
-            }  catch (IOException ex) {
-                   Logger.getLogger(DaoAdmImpl.class.getName()).log(Level.SEVERE, null, ex);
-               }
+            }
             
             return true;
 
@@ -88,59 +73,79 @@ public class DaoAdmImpl implements IDaoAdministrador {
             return false;
         }
     }
-/*        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
     @Override
-    public boolean removeAdministrador(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean atualizarAdministrador(String cpf, Aluno aluno) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-**/
-    @Override
-    public boolean buscarAdministrador(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean listarAdministrador() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean removeAdministrador(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean atualizarAdministrador(String cpf, Aluno aluno) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public boolean removeAdministrador(String email) throws IOException, ClassNotFoundException {
+        List<Administrador> listaAdm;        
         
-    }
-/*
-    @Override
-    public boolean removeAdministrador(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (arquivo.length() > 0) {
+            ObjectInputStream in = new ObjectInputStream(
+                    new FileInputStream(arquivo));
+
+            listaAdm = (List<Administrador>) in.readObject();
+        } else {
+            return false;
+        }
+        
+        
+        for(int i=0; i<listaAdm.size(); i++){
+        
+            if(listaAdm.get(i).getEmail().equals(email)){
+                listaAdm.remove(i); 
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(arquivo));
+                out.writeObject(listaAdm);
+                out.close();
+                return true;
+            }
+            
+        }
+        return false;
     }
 
     @Override
-    public boolean atualizarAdministrador(String cpf, Aluno aluno) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean atualizarAdministrador(String email, Administrador adm) throws IOException, ClassNotFoundException {
+        List<Administrador> listaAdm;        
+        
+        if (arquivo.length() > 0) {
+            ObjectInputStream in = new ObjectInputStream(
+                    new FileInputStream(arquivo));
+
+            listaAdm = (List<Administrador>) in.readObject();
+        } else {
+            listaAdm = new ArrayList<>();
+        }
+        
+        for(Administrador a : listaAdm){
+            if(a.getEmail().equals(email)){
+                a.setEmail(adm.getEmail());
+                a.setNome(adm.getNome());
+                a.setSenha(adm.getSenha());
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     @Override
-    public boolean buscarAdministrador(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Administrador buscarAdministrador(String email) throws IOException, ClassNotFoundException {
+     for(Administrador a : listarAdministrador()){
+            if(a.getEmail().equals(email))
+                return a;
+        }
+        return null;   
     }
 
     @Override
-    public boolean listarAdministrador() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public List<Administrador> listarAdministrador() throws IOException, ClassNotFoundException {
+        if (arquivo.length() > 0) {
+            ObjectInputStream in = new ObjectInputStream(
+                    new FileInputStream(arquivo));
 
-    
-}*/
+            return (List<Administrador>) in.readObject();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+}
+

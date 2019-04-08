@@ -5,8 +5,13 @@
  */
 package telas;
 
-import java.awt.Component;
-import telas.RegistroAdm;
+import Dao.DaoAdmImpl;
+import Entidades.Administrador;
+import Excecoes.ExcecaoFormulario;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,8 +22,11 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    private DaoAdmImpl dao;
     public Login() {
+        dao = new DaoAdmImpl();
         initComponents();
+        
     }
 
     /**
@@ -59,7 +67,11 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel4.setText("Senha:");
 
-        passwordEntre.setText("jPasswordField1");
+        passwordEntre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordEntreActionPerformed(evt);
+            }
+        });
 
         BTentrar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         BTentrar.setText("Entrar");
@@ -147,23 +159,18 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void BTentrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTentrarActionPerformed
-       String admEmail = JTemail.getText();
-       String senha = String.valueOf(passwordEntre.getPassword());
-       Menu obj;
-
-//        if (!admEmail.isEmpty() && !senha.isEmpty()) {
-//            if (Admin(admEmail, senha)) {
-                Login login = null;
-                obj = new Menu();  
-                Component add;        
-                //add = Login.add(obj);
-                 obj.setVisible(true);        
-                this.dispose();
-//            }
+        try {
+            validarFormulario();
+            autenticarAdm();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcecaoFormulario ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Mensagem de Erro", JOptionPane.ERROR_MESSAGE);
+        }
        
-//        }   
-        
-        // TODO add your handling code here:
     }//GEN-LAST:event_BTentrarActionPerformed
 
     private void JTemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTemailActionPerformed
@@ -171,15 +178,13 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_JTemailActionPerformed
 
     private void BTregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTregistrarActionPerformed
-        RegistroAdm obj;       
-       // TODO add your handling code here:;
-        obj = new RegistroAdm();  
-        Component add;        
-        //add = Login.add(obj);
-        obj.setVisible(true);
-        this.dispose();
+        registrarAdm();
                 // TODO add your handling code here:;
     }//GEN-LAST:event_BTregistrarActionPerformed
+
+    private void passwordEntreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordEntreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordEntreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,4 +232,37 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField passwordEntre;
     // End of variables declaration//GEN-END:variables
+
+    private void autenticarAdm() throws IOException, ClassNotFoundException {
+       String email = JTemail.getText();
+       String senha = String.valueOf(passwordEntre.getPassword());
+       
+        Administrador adm = dao.buscarAdministrador(email);
+        if(adm.getSenha().equals(senha)){
+            new Menu(email).setVisible(true);
+            this.dispose();
+            
+        }
+        
+    }
+
+    private void registrarAdm() {
+        String token = JOptionPane.showInputDialog("Digite o token de ADM");
+        if(token.equals("123456")){
+            new RegistroAdm().setVisible(true);
+            this.dispose();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Token incorreto");
+        }
+    }
+
+    private void validarFormulario() throws ExcecaoFormulario {
+        if(JTemail.getText().equals("")){
+            throw new ExcecaoFormulario("O campo email não pode ser vazio!");
+        }
+        if(String.copyValueOf(passwordEntre.getPassword()).equals("")){
+            throw new ExcecaoFormulario("O campo Senha não pode estar vazio!");
+        }
+    }
 }

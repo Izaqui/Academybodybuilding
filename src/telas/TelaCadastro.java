@@ -6,11 +6,14 @@
 package telas;
 
 import Dao.DaoAlunoImpl;
+import Entidades.Aluno;
 import java.awt.Component;
-import javax.swing.JOptionPane;
-import Excecoes.Excecao;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import tipoSexo.Sexo;
 
 /**
  *
@@ -21,8 +24,16 @@ public class TelaCadastro extends javax.swing.JFrame {
     /**
      * Creates new form TelaCadastro
      */
+    private String email;
+    private DaoAlunoImpl daoAluno;
     public TelaCadastro() {
         initComponents();
+    }
+
+    public TelaCadastro(String email) {
+        initComponents();
+        this.email = email;
+        daoAluno = new DaoAlunoImpl();
     }
 
     /**
@@ -326,49 +337,15 @@ public class TelaCadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_jBvoltarActionPerformed
 
     private void jBsalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsalvarActionPerformed
-        
-        String nome = jTNome.getText();
-        String cpf = jFCpf.getText();
-        String endereco = jTEndereco.getText();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String sNascimento = jFNascimento.getText();
-        LocalDate nascimento = LocalDate.parse(sNascimento, formato);
-        String sIngresso = jFIngresso.getText();
-        LocalDate ingresso =LocalDate.parse(sIngresso, formato);
-        String sexo = "";
-        for(int i=0; i<2; i++){
-            if(jCSexo.getSelectedIndex()== 0){
-                sexo ="Masculino";
-            }
-            else
-                sexo = "Feminino";
+        try {
+            
+            novoAluno();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(TelaCadastro.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TelaCadastro.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String pagamento = "";
-        for(int i=0; i<2; i++){
-            if(jCPagamento.getSelectedIndex()== 0){
-                pagamento ="Dinheiro";
-            }
-            else
-                pagamento = "Cartão";
-        }
-        String status ="";
-        for(int i=0; i<2; i++){
-            if(jCStatus.getSelectedIndex()== 0){
-                status ="Pago";
-            }
-            else
-                status = "Devedor";
-        }
-        this.jBsalvar.setSelected(true);
-        
-        jTNome.setText("");
-        jTEmail.setText("");
-        jTEndereco.setText("");
-        jFCpf.setText("");
-        jFIngresso.setText("");
-        jFNascimento.setText("");
-        jFTelefone.setText("");
-        
     }//GEN-LAST:event_jBsalvarActionPerformed
 
     private void jTNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTNomeActionPerformed
@@ -473,9 +450,57 @@ public class TelaCadastro extends javax.swing.JFrame {
     private javax.swing.JTextField jTNome;
     // End of variables declaration//GEN-END:variables
 
-    private class JBsalvar {
-
-        public JBsalvar() {
+    private void novoAluno() throws IOException, ClassNotFoundException {
+                
+        String nome = jTNome.getText();
+        String cpf = jFCpf.getText();
+        String endereco = jTEndereco.getText();
+        String emailAluno = jTEmail.getText();
+        String telefone = jFTelefone.getText();
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String sNascimento = jFNascimento.getText();
+        LocalDate nascimento = LocalDate.parse(sNascimento, formato);
+        
+        String sIngresso = jFIngresso.getText();
+        LocalDate ingresso = LocalDate.parse(sIngresso, formato);
+        
+        Enum sexo = null;
+        for(int i=0; i<2; i++){
+            if(jCSexo.getSelectedIndex()== 0){
+                sexo = Sexo.MASCULINO;
+            }
+            else
+                sexo = Sexo.FEMININO;
         }
+        
+        
+        String pagamento = "";
+        for(int i=0; i<2; i++){
+            if(jCPagamento.getSelectedIndex()== 0){
+                pagamento ="Dinheiro";
+            }
+            else
+                pagamento = "Cartão";
+        }
+        String status ="";
+        for(int i=0; i<2; i++){
+            if(jCStatus.getSelectedIndex()== 0){
+                status ="Pago";
+            }
+            else
+                status = "Devedor";
+        }
+        
+        
+        Aluno a = new Aluno(nome, sexo, cpf, endereco, emailAluno, telefone, nascimento, ingresso, pagamento, status);
+        daoAluno.addAluno(a);
+        
+        new Menu(email).setVisible(true);
+        this.dispose();
+        
+        
     }
+
+    
 }

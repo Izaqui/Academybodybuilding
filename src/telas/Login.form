@@ -141,9 +141,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="passwordEntre">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="passwordEntreActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="BTentrar">
           <Properties>

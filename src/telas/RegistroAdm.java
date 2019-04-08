@@ -7,7 +7,10 @@ package telas;
 
 import Entidades.Administrador;
 import Dao.DaoAdmImpl;
-import java.awt.Component;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,8 +21,10 @@ public class RegistroAdm extends javax.swing.JFrame {
     /**
      * Creates new form RegistroAdm
      */
+    private DaoAdmImpl daoAdm;
     public RegistroAdm() {
         initComponents();
+        daoAdm = new DaoAdmImpl();
     }
 
     /**
@@ -83,9 +88,12 @@ public class RegistroAdm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel6.setText("Confirmar Senha:");
 
-        jPasswordConfirme.setText("jPasswordField1");
+        jPasswordConfirme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordConfirmeActionPerformed(evt);
+            }
+        });
 
-        jPasswordSenha.setText("jPasswordField2");
         jPasswordSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordSenhaActionPerformed(evt);
@@ -180,26 +188,25 @@ public class RegistroAdm extends javax.swing.JFrame {
     }//GEN-LAST:event_JTAdmCadastroNomeActionPerformed
 
     private void Registrado2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Registrado2ActionPerformed
-         String nome = JTAdmCadastroNome.getText();
-         String email = JTnewEmail.getText();
-         String password = jPasswordSenha.getText();
-         String passwordCompare = jPasswordConfirme.getText();
-
-         if(password == null ? passwordCompare == null : password.equals(passwordCompare)){
-             Login obj;       
-             obj = new Login();  
-             Component add;        
-//             add = Login.add(obj);
-             obj.setVisible(true);
-             this.dispose();
-         }
-
+        try {
+            
+            registrarAdm();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(RegistroAdm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegistroAdm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_Registrado2ActionPerformed
 
     private void jPasswordSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordSenhaActionPerformed
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordSenhaActionPerformed
+
+    private void jPasswordConfirmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordConfirmeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordConfirmeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,4 +255,22 @@ public class RegistroAdm extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordConfirme;
     private javax.swing.JPasswordField jPasswordSenha;
     // End of variables declaration//GEN-END:variables
+
+    private void registrarAdm() throws IOException, ClassNotFoundException {
+        String nome = JTAdmCadastroNome.getText();
+        String email = JTnewEmail.getText();
+        String password = String.copyValueOf(jPasswordSenha.getPassword());
+        String passwordCompare = String.copyValueOf(jPasswordConfirme.getPassword());
+        
+        Administrador novoAdm = new Administrador(nome, email, password);
+
+        if(password.equals(passwordCompare)){
+            daoAdm.addAdministrador(novoAdm);
+            new Login().setVisible(true);
+            this.dispose();
+         }
+        else{
+            JOptionPane.showMessageDialog(null, "Senhas não correspondem!");
+        }
+    }
 }

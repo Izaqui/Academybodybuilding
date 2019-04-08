@@ -9,16 +9,15 @@ import Entidades.Aluno;
 import java.awt.Component;
 import java.util.List;
 import Dao.DaoAlunoImpl;
-import java.awt.event.ContainerListener;
+import Entidades.Table;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.TextUI;
 
 /**
  *
@@ -29,8 +28,20 @@ public class TelaAtualizar extends javax.swing.JFrame {
     /**
      * Creates new form TelaAtualizar
      */
+    public Table tabela; 
+    private String email;
+    private DaoAlunoImpl daoAluno;
+    
     public TelaAtualizar() {
         initComponents();
+    }
+
+    public TelaAtualizar(String email) {
+        initComponents();
+        this.email = email;
+        tabela = new Table();
+        daoAluno = new DaoAlunoImpl();
+        inicializarTabela();
     }
 
     /**
@@ -44,9 +55,7 @@ public class TelaAtualizar extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jFCpf = new javax.swing.JFormattedTextField();
-        JtNome = new javax.swing.JTextField();
+        cpfBusca = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jBPesquisa = new javax.swing.JButton();
@@ -56,8 +65,8 @@ public class TelaAtualizar extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        JtNome = new javax.swing.JTextField();
+        cpfAluno = new javax.swing.JFormattedTextField();
         jTEmail = new javax.swing.JTextField();
         jFTelefone = new javax.swing.JFormattedTextField();
         jTEndereco = new javax.swing.JTextField();
@@ -65,28 +74,19 @@ public class TelaAtualizar extends javax.swing.JFrame {
         jBEditar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jBsair = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTImprime = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelaAlunos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setForeground(new java.awt.Color(17, 22, 28));
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel3.setText("Nome:");
+        jLabel3.setText("CPF:");
 
-        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel4.setText("CPF:");
-
-        try {
-            jFCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
-        JtNome.addActionListener(new java.awt.event.ActionListener() {
+        cpfBusca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JtNomeActionPerformed(evt);
+                cpfBuscaActionPerformed(evt);
             }
         });
 
@@ -119,7 +119,7 @@ public class TelaAtualizar extends javax.swing.JFrame {
         jLabel8.setText("Status");
 
         try {
-            jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            cpfAluno.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -142,6 +142,11 @@ public class TelaAtualizar extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jButton3.setText("Apagar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jBsair.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jBsair.setText("Sair");
@@ -151,6 +156,24 @@ public class TelaAtualizar extends javax.swing.JFrame {
             }
         });
 
+        tabelaAlunos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabelaAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaAlunosMousePressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tabelaAlunos);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -159,17 +182,13 @@ public class TelaAtualizar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                        .addComponent(jLabel3)
                         .addGap(4, 4, 4)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(JtNome)
-                            .addComponent(jFCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(jBPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(60, 60, 60)
+                        .addComponent(cpfBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jBPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(120, 120, 120)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,8 +211,8 @@ public class TelaAtualizar extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2)
-                            .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                            .addComponent(JtNome)
+                            .addComponent(cpfAluno, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                             .addComponent(jTEmail))))
                 .addGap(72, 72, 72)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,7 +220,10 @@ public class TelaAtualizar extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBsair, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(680, 680, 680))
-            .addComponent(jSeparator2)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,21 +238,17 @@ public class TelaAtualizar extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel3)
-                                            .addComponent(JtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(33, 33, 33)
+                                            .addComponent(cpfBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(49, 49, 49)
                                         .addComponent(jBPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel1)
-                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(JtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel2)
-                                            .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(cpfAluno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel5)
@@ -254,103 +272,81 @@ public class TelaAtualizar extends javax.swing.JFrame {
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jBsair, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        jTImprime.setColumns(20);
-        jTImprime.setRows(5);
-        jScrollPane1.setViewportView(jTImprime);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1612, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBsairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsairActionPerformed
-           Menu obj;       
-       // TODO add your handling code here:;
-        obj = new Menu();  
-        Component add;        
-        //add = Login.add(obj);
-        obj.setVisible(true);
-        this.dispose();
+          new Menu().setVisible(true);
+          this.dispose();
        // TODO add your handling code here:
     }//GEN-LAST:event_jBsairActionPerformed
 
     private void jBPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisaActionPerformed
-         String nome = JtNome.getText();
-         String cpf = jFCpf.getText();
-         List<Aluno> listaAluno = null;
-         DaoAlunoImpl dao = new DaoAlunoImpl();
-         List<Aluno> listaNova = new ArrayList<>();
-         for(int i=0; i < listaAluno.size(); i++){ 
-             if(listaAluno.get(i).getNome().equals(nome)){
-                        listaNova.add(listaAluno.get(i));
-         }
-             if(listaAluno.get(i).getCpf().equals(cpf)){
-                        listaNova.add(listaAluno.get(i));
-         }
-         }
-         List<Aluno> lista;
         try {
-            lista = dao.listarAluno();
+            buscarAlunoCpf();
+            // TODO add your handling code here:
         } catch (IOException ex) {
             Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
         }
-         jTImprime.setText(listaAluno.toString());
-         
-        // TODO add your handling code here:
     }//GEN-LAST:event_jBPesquisaActionPerformed
 
-    private void JtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtNomeActionPerformed
+    private void cpfBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpfBuscaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_JtNomeActionPerformed
+    }//GEN-LAST:event_cpfBuscaActionPerformed
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
-         String nome = JtNome.getText();
-        String cpf = jFCpf.getText();
-        String endereco = jTEndereco.getText();
-        String pagamento = "";
-        String status ="";
-        for(int i=0; i<2; i++){
-            if(jCoStatus.getSelectedIndex()== 0){
-                status ="Pago";
-            }
-            else
-                status = "Devedor";
+        try {
+            
+            editarAluno();
+            
+            // TODO add your handling code here:
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.jBEditar.setSelected(true);
-        
-        JtNome.setText("");
-        jTEmail.setText("");
-        jTEndereco.setText("");
-        jFCpf.setText("");
-        jFTelefone.setText("");
-        // TODO add your handling code here:
     }//GEN-LAST:event_jBEditarActionPerformed
+
+    private void tabelaAlunosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaAlunosMousePressed
+        
+        linhaSelecionada();
+        
+    }//GEN-LAST:event_tabelaAlunosMousePressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            apagarAluno();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -389,29 +385,157 @@ public class TelaAtualizar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField JtNome;
+    private javax.swing.JFormattedTextField cpfAluno;
+    private javax.swing.JTextField cpfBusca;
     private javax.swing.JButton jBEditar;
     private javax.swing.JButton jBPesquisa;
     private javax.swing.JButton jBsair;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jCoStatus;
-    private javax.swing.JFormattedTextField jFCpf;
     private javax.swing.JFormattedTextField jFTelefone;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTEmail;
     private javax.swing.JTextField jTEndereco;
-    private javax.swing.JTextArea jTImprime;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable tabelaAlunos;
     // End of variables declaration//GEN-END:variables
+
+    private void inicializarTabela() {
+        
+            
+            
+        try {
+            List<Aluno> listaAlunos = new ArrayList<>(); 
+            listaAlunos = daoAluno.listarAluno();
+            tabela.addList(listaAlunos);
+            tabelaAlunos.setModel(tabela);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+       
+
+    }
+
+    private void editarAluno() throws IOException, ClassNotFoundException {
+        
+        int linha = tabelaAlunos.getSelectedRow();
+        
+        if (linha >= 0) {
+                //Cpf do aluno 
+                Object oID = tabelaAlunos.getValueAt(linha, 2);
+              
+                
+                
+                //Dados para atualizar
+                String cpfAntigo = oID.toString();
+                
+                String nome = JtNome.getText();
+                String cpfNovo = cpfAluno.getText();
+                String emailAlu = jTEmail.getText();
+                String telefone = jFTelefone.getText();
+                String endereco = jTEndereco.getText();
+                String status = "";
+                for(int i=0; i<2; i++){
+                    if(jCoStatus.getSelectedIndex()== 0){
+                        status ="Pago";
+                    }
+                    else
+                        status = "Devedor";
+                }
+                
+                //atualizar dados
+                Aluno a = daoAluno.buscarAlunoCpf(cpfAntigo);
+                a.setNome(nome);
+                a.setCpf(cpfNovo);
+                a.setEmail(emailAlu);
+                a.setTelefone(telefone);
+                a.setEndereco(endereco);
+                a.setStatus(status);
+                
+                System.out.println(a.toString());
+                
+                daoAluno.atualizarAluno(cpfAntigo, a);
+  
+                limparCampos();
+                inicializarTabela();
+          
+        }
+    }
+
+    private void limparCampos() {
+        JtNome.setText("");
+        cpfAluno.setText("");
+        jTEmail.setText("");
+        jFTelefone.setText("");
+        jTEndereco.setText("");
+        jCoStatus.setSelectedIndex(0);
+    
+}
+
+    private void linhaSelecionada() {
+        
+        int linha = tabelaAlunos.getSelectedRow();
+        if (linha >= 0) {
+
+            Object oNome = tabelaAlunos.getValueAt(linha, 0);
+            Object oCpf = tabelaAlunos.getValueAt(linha, 2);
+            Object oEndereco = tabelaAlunos.getValueAt(linha, 3);
+            Object oEmail = tabelaAlunos.getValueAt(linha, 4);
+            Object oTelefone = tabelaAlunos.getValueAt(linha, 5);
+            Object oStatus = tabelaAlunos.getValueAt(linha, 8);
+            
+            JtNome.setText(oNome.toString());
+            cpfAluno.setText(oCpf.toString());
+            jTEmail.setText(oEmail.toString());
+            jFTelefone.setText(oTelefone.toString());
+            jTEndereco.setText(oEndereco.toString());
+            
+            if(oStatus.toString().equals("Pago")){
+                jCoStatus.setSelectedIndex(0);
+            }else{
+                jCoStatus.setSelectedIndex(1);
+            }
+        
+        }
+            
+            
+    }
+
+    private void apagarAluno() throws IOException, ClassNotFoundException {
+        int linha = tabelaAlunos.getSelectedRow();
+        if (linha >= 0) {
+                Object o = tabelaAlunos.getValueAt(linha, 2);
+                String cpf = o.toString();
+                
+                daoAluno.RemoveAluno(cpf);
+                
+                inicializarTabela();
+    
+        }
+    }
+
+    private void buscarAlunoCpf() throws IOException, ClassNotFoundException {
+        
+        String cpf = cpfBusca.getText();
+        Aluno aluno = daoAluno.buscarAlunoCpf(cpf);
+        
+        List<Aluno> lista = new ArrayList<>();
+        lista.add(aluno);
+        
+        tabela.addList(lista);
+        tabelaAlunos.setModel(tabela);
+    }
 }

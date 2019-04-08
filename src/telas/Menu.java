@@ -5,7 +5,11 @@
  */
 package telas;
 
+import Dao.DaoAlunoImpl;
 import java.awt.Component;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import telas.Login;
 import telas.TelaAtualizar;
 
@@ -18,8 +22,17 @@ public class Menu extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
+    private String email;
+    private DaoAlunoImpl daoAluno;
+    
     public Menu() {
         initComponents();
+        
+    }
+
+    public Menu(String email) {
+        initComponents();
+        this.email = email;
     }
 
     /**
@@ -124,34 +137,25 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBsairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsairActionPerformed
-         Login obj;       
-       // TODO add your handling code here:;
-        obj = new Login();  
-        Component add;        
-        //add = Login.add(obj);
-        obj.setVisible(true);
-        this.dispose();
+         new Login().setVisible(true);
+         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jBsairActionPerformed
 
     private void jBListarAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBListarAlterarActionPerformed
-         TelaAtualizar obj;       
-       // TODO add your handling code here:;
-        obj = new TelaAtualizar();  
-        Component add;        
-        //add = Login.add(obj);
-        obj.setVisible(true);
-        this.dispose();
-        // TODO add your handling code here:
+        try {
+            
+            listarAlunos();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBListarAlterarActionPerformed
 
     private void jBcadastarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcadastarActionPerformed
-        TelaCadastro obj;
-        
-        obj = new TelaCadastro();
-        Component add;
-        obj.setVisible(true);
-        this.dispose();
+        cadastrarAluno();
         // TODO add your handling code here:
     }//GEN-LAST:event_jBcadastarActionPerformed
 
@@ -198,4 +202,14 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    private void listarAlunos() throws IOException, ClassNotFoundException {
+        new TelaAtualizar(email).setVisible(true);
+        this.dispose();
+    }
+
+    private void cadastrarAluno() {
+        new TelaCadastro(email).setVisible(true);
+        this.dispose();
+    }
 }

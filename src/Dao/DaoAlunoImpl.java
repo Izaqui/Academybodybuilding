@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +72,31 @@ public class DaoAlunoImpl implements IDaoAluno {
 
     @Override
     public boolean RemoveAluno(String cpf) throws IOException, ClassNotFoundException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        List<Aluno> listaAluno;        
+        
+        if (arquivo.length() > 0) {
+            ObjectInputStream in = new ObjectInputStream(
+                    new FileInputStream(arquivo));
+
+            listaAluno = (List<Aluno>) in.readObject();
+        } else {
+            return false;
+        }
+        
+        
+        for(int i=0; i<listaAluno.size(); i++){
+        
+            if(listaAluno.get(i).getCpf().equals(cpf)){
+                listaAluno.remove(i); 
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(arquivo));
+                out.writeObject(listaAluno);
+                out.close();
+                return true;
+            }
+            
+        }
+        return false;
     }
 
     @Override
@@ -89,52 +112,36 @@ public class DaoAlunoImpl implements IDaoAluno {
             listaAluno = new ArrayList<>();
         }
         
-        for(Aluno a : listaAluno){
-            if(a.getCpf().equals(cpf)){
-                a.setEmail(aluno.getEmail());
-                a.setEndereco(aluno.getEmail());
-                a.setIngresso(aluno.getIngresso());
-                a.setNascimento(aluno.getNascimento());
-                a.setNome(aluno.getNome());
-                a.setSexo(aluno.getSexo());
-                a.setStatus(aluno.getStatus());
-                a.setTelefone(aluno.getTelefone());
-                a.setTipoPagamento(aluno.getTipoPagamento());
+        for(int i=0; i<listaAluno.size(); i++){
+            if(listaAluno.get(i).getCpf().equals(cpf)){
+                listaAluno.get(i).setEmail(aluno.getEmail());
+                listaAluno.get(i).setEndereco(aluno.getEndereco());
+                listaAluno.get(i).setIngresso(aluno.getIngresso());
+                listaAluno.get(i).setNascimento(aluno.getNascimento());
+                listaAluno.get(i).setNome(aluno.getNome());
+                listaAluno.get(i).setSexo(aluno.getSexo());
+                listaAluno.get(i).setStatus(aluno.getStatus());
+                listaAluno.get(i).setTelefone(aluno.getTelefone());
+                listaAluno.get(i).setTipoPagamento(aluno.getTipoPagamento());
+                
+                ObjectOutputStream out = new ObjectOutputStream(
+                    new FileOutputStream(arquivo));
+                out.writeObject(listaAluno);
+                out.close();
                 return true;
             }
         }
         
-//        for(int i=0; i<listaAluno.size();i++){
-//        
-//            if(listaUser.get(i).getId() == id){
-//            
-//                listaUser.get(i).setEmail(u.getEmail());
-//                listaUser.get(i).setNome(u.getNome());
-//                listaUser.get(i).setNascimento(u.getNascimento());
-//                listaUser.get(i).setSexo(u.getSexo());
-//                listaUser.get(i).setSenha(u.getSenha());
-//                
-//                ObjectOutputStream out = new ObjectOutputStream(
-//                    new FileOutputStream(arquivo));
-//                out.writeObject(listaUser);
-//                out.close();
-//            
-//                return true;
-//                
-//            }
-//        
-//        }
         return false;
     }
 
     @Override
     public Aluno buscarAlunoCpf(String cpf) throws IOException, ClassNotFoundException{
-        Iterable<Aluno> listaAluno = null;
-         for(Aluno a : listaAluno){
-            if(a.getCpf().equals(cpf)){
-                return (Aluno) listaAluno;
-            }}
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(Aluno a : listarAluno()){
+            if(a.getCpf().equals(cpf))
+                return a;
+        }
+        return null;
     }
 
     @Override

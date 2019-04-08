@@ -7,16 +7,18 @@ package Interfaces;
 
 import Entidades.Administrador;
 import Entidades.Aluno;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
  * @author kiel
  */
 public interface IDaoAdministrador {
-    public boolean addAdministrador(Administrador adm);
-    public boolean removeAdministrador(String email);
-    public boolean atualizarAdministrador(String cpf, Aluno aluno);
-    public boolean buscarAdministrador(String email);
-    public boolean listarAdministrador();
+    public boolean addAdministrador(Administrador adm)throws IOException, ClassNotFoundException;
+    public boolean removeAdministrador(String email)throws IOException, ClassNotFoundException;
+    public boolean atualizarAdministrador(String email, Administrador adm)throws IOException, ClassNotFoundException;
+    public Administrador buscarAdministrador(String email)throws IOException, ClassNotFoundException;
+    public List<Administrador> listarAdministrador()throws IOException, ClassNotFoundException;
     
 }

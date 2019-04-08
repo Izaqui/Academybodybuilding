@@ -9,9 +9,9 @@ package Excecoes;
  *
  * @author kiel
  */
-public class Excecao extends Exception{
+public class ExcecaoFormulario extends Exception{
     
-    public Excecao(String mensagem){
+    public ExcecaoFormulario(String mensagem){
     
         super(mensagem);
     
