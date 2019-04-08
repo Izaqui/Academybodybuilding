@@ -67,13 +67,13 @@
                           </Group>
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jTextField1" max="32767" attributes="0"/>
-                              <Component id="jFormattedTextField1" pref="283" max="32767" attributes="0"/>
+                              <Component id="JtNome" max="32767" attributes="0"/>
+                              <Component id="jFCpf" pref="283" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="176" max="-2" attributes="0"/>
+                          <Component id="jBPesquisa" min="-2" pref="176" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
@@ -114,7 +114,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButton2" min="-2" pref="112" max="-2" attributes="0"/>
                       <Component id="jButton3" min="-2" pref="112" max="-2" attributes="0"/>
-                      <Component id="jButton4" min="-2" pref="112" max="-2" attributes="0"/>
+                      <Component id="jBsair" min="-2" pref="112" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="680" max="-2" attributes="0"/>
               </Group>
@@ -134,15 +134,15 @@
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="JtNome" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jFCpf" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                                          <Component id="jButton1" min="-2" pref="46" max="-2" attributes="0"/>
+                                          <Component id="jBPesquisa" min="-2" pref="46" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="3" attributes="0">
@@ -183,7 +183,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jButton3" min="-2" pref="56" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jButton4" min="-2" pref="56" max="-2" attributes="0"/>
+                                  <Component id="jBsair" min="-2" pref="56" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -212,14 +212,17 @@
             <Property name="text" type="java.lang.String" value="CPF:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField1">
+        <Component class="javax.swing.JFormattedTextField" name="jFCpf">
           <Properties>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
               <Format format="###.###.###-##" subtype="-1" type="5"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="JtNome">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JtNomeActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
           <Properties>
@@ -228,13 +231,16 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator2">
         </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="jBPesquisa">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="SansSerif" size="24" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pesquisar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBPesquisaActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -333,13 +339,16 @@
             <Property name="text" type="java.lang.String" value="Apagar"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="jBsair">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="SansSerif" size="18" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Sair"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBsairActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

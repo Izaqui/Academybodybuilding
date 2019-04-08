@@ -11,6 +11,7 @@ import tipoSexo.Sexo;
 public class App {
     
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+      
         Aluno aluno = new Aluno("Jose", Sexo.MASCULINO, "01234567895", "Rua da Bosta", "zenoia@gmail.com", 
                 "(88)99636-9852", LocalDate.now(), LocalDate.now(), "Dinheiro", "Pago");
 //        Aluno aluno2 = new Aluno("Matheus", Sexo.MASCULINO, "01234567896", "Rua da Bosta", "zenoia@gmail.com", 

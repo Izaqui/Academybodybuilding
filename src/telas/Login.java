@@ -5,6 +5,9 @@
  */
 package telas;
 
+import java.awt.Component;
+import telas.RegistroAdm;
+
 /**
  *
  * @author kiel
@@ -31,11 +34,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        email = new javax.swing.JTextField();
+        JTemail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        password = new javax.swing.JPasswordField();
-        entrar = new javax.swing.JButton();
-        registrar = new javax.swing.JButton();
+        passwordEntre = new javax.swing.JPasswordField();
+        BTentrar = new javax.swing.JButton();
+        BTregistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,30 +50,30 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setText("E-mail:");
 
-        email.addActionListener(new java.awt.event.ActionListener() {
+        JTemail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailActionPerformed(evt);
+                JTemailActionPerformed(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel4.setText("Senha:");
 
-        password.setText("jPasswordField1");
+        passwordEntre.setText("jPasswordField1");
 
-        entrar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        entrar.setText("Entrar");
-        entrar.addActionListener(new java.awt.event.ActionListener() {
+        BTentrar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        BTentrar.setText("Entrar");
+        BTentrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                entrarActionPerformed(evt);
+                BTentrarActionPerformed(evt);
             }
         });
 
-        registrar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        registrar.setText("Registrar");
-        registrar.addActionListener(new java.awt.event.ActionListener() {
+        BTregistrar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        BTregistrar.setText("Registrar");
+        BTregistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registrarActionPerformed(evt);
+                BTregistrarActionPerformed(evt);
             }
         });
 
@@ -92,12 +95,12 @@ public class Login extends javax.swing.JFrame {
                                     .addComponent(jLabel4))
                                 .addGap(2, 2, 2)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(email)
-                                    .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)))
+                                    .addComponent(JTemail)
+                                    .addComponent(passwordEntre, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(entrar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(BTentrar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(BTregistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel2))))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
@@ -110,15 +113,15 @@ public class Login extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JTemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
-                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passwordEntre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(entrar)
-                    .addComponent(registrar))
+                    .addComponent(BTentrar)
+                    .addComponent(BTregistrar))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
@@ -140,17 +143,36 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void entrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrarActionPerformed
+    private void BTentrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTentrarActionPerformed
+       String email = JTemail.getText();
+       String senha = passwordEntre.getText();
+       
+        Menu obj;   
+        Login login = null;
+        RegistroAdm compare = null;
+       // TODO add your handling code here:;
+        obj = new Menu();  
+        Component add;        
+        //add = Login.add(obj);
+        obj.setVisible(true);        
+        this.dispose();
         // TODO add your handling code here:
-    }//GEN-LAST:event_entrarActionPerformed
+    }//GEN-LAST:event_BTentrarActionPerformed
 
-    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+    private void JTemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTemailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_emailActionPerformed
+    }//GEN-LAST:event_JTemailActionPerformed
 
-    private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_registrarActionPerformed
+    private void BTregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTregistrarActionPerformed
+        RegistroAdm obj;       
+       // TODO add your handling code here:;
+        obj = new RegistroAdm();  
+        Component add;        
+        //add = Login.add(obj);
+        obj.setVisible(true);
+        this.dispose();
+                // TODO add your handling code here:;
+    }//GEN-LAST:event_BTregistrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,14 +210,14 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField email;
-    private javax.swing.JButton entrar;
+    private javax.swing.JButton BTentrar;
+    private javax.swing.JButton BTregistrar;
+    private javax.swing.JTextField JTemail;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField password;
-    private javax.swing.JButton registrar;
+    private javax.swing.JPasswordField passwordEntre;
     // End of variables declaration//GEN-END:variables
 }

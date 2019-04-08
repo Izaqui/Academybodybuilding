@@ -6,6 +6,10 @@ import java.util.Objects;
 
 public class Aluno implements Serializable{
 
+    public static int size() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private String nome;
     private Enum sexo;
     private String cpf;
