@@ -142,20 +142,27 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+     private boolean Admin(String admEmail, String senha) {
+        return admEmail.equals("admin") && senha.equals("admin");
+    }
+    
     private void BTentrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTentrarActionPerformed
-       String email = JTemail.getText();
-       String senha = passwordEntre.getText();
+       String admEmail = JTemail.getText();
+       String senha = String.valueOf(passwordEntre.getPassword());
+       Menu obj;
+
+//        if (!admEmail.isEmpty() && !senha.isEmpty()) {
+//            if (Admin(admEmail, senha)) {
+                Login login = null;
+                obj = new Menu();  
+                Component add;        
+                //add = Login.add(obj);
+                 obj.setVisible(true);        
+                this.dispose();
+//            }
        
-        Menu obj;   
-        Login login = null;
-        RegistroAdm compare = null;
-       // TODO add your handling code here:;
-        obj = new Menu();  
-        Component add;        
-        //add = Login.add(obj);
-        obj.setVisible(true);        
-        this.dispose();
+//        }   
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_BTentrarActionPerformed
 

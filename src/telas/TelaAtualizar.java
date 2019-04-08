@@ -7,7 +7,18 @@ package telas;
 
 import Entidades.Aluno;
 import java.awt.Component;
+import java.util.List;
+import Dao.DaoAlunoImpl;
+import java.awt.event.ContainerListener;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.TextUI;
 
 /**
  *
@@ -47,15 +58,15 @@ public class TelaAtualizar extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jFormattedTextField2 = new javax.swing.JFormattedTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jFormattedTextField3 = new javax.swing.JFormattedTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        jTEmail = new javax.swing.JTextField();
+        jFTelefone = new javax.swing.JFormattedTextField();
+        jTEndereco = new javax.swing.JTextField();
+        jCoStatus = new javax.swing.JComboBox<>();
+        jBEditar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jBsair = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTImprime = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,15 +125,20 @@ public class TelaAtualizar extends javax.swing.JFrame {
         }
 
         try {
-            jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)# ####-####")));
+            jFTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)# ####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pago", "Devedor" }));
+        jCoStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pago", "Devedor" }));
 
-        jButton2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jButton2.setText("Editar");
+        jBEditar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jBEditar.setText("Editar");
+        jBEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEditarActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jButton3.setText("Apagar");
@@ -140,9 +156,9 @@ public class TelaAtualizar extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
@@ -151,7 +167,7 @@ public class TelaAtualizar extends javax.swing.JFrame {
                             .addComponent(JtNome)
                             .addComponent(jFCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
+                        .addGap(113, 113, 113)
                         .addComponent(jBPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(60, 60, 60)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -165,10 +181,10 @@ public class TelaAtualizar extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jCoStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 112, Short.MAX_VALUE))
-                            .addComponent(jFormattedTextField3)
-                            .addComponent(jTextField4)))
+                            .addComponent(jFTelefone)
+                            .addComponent(jTEndereco)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -178,10 +194,10 @@ public class TelaAtualizar extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField2)
                             .addComponent(jFormattedTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                            .addComponent(jTextField3))))
+                            .addComponent(jTEmail))))
                 .addGap(72, 72, 72)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBsair, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(680, 680, 680))
@@ -205,7 +221,7 @@ public class TelaAtualizar extends javax.swing.JFrame {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel4)
                                             .addComponent(jFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(29, 29, 29)
+                                        .addGap(33, 33, 33)
                                         .addComponent(jBPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -218,22 +234,22 @@ public class TelaAtualizar extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel5)
-                                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jTEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel6)
-                                            .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jFTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel7)
-                                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(jTEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jCoStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -243,9 +259,9 @@ public class TelaAtualizar extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTImprime.setColumns(20);
+        jTImprime.setRows(5);
+        jScrollPane1.setViewportView(jTImprime);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -285,15 +301,56 @@ public class TelaAtualizar extends javax.swing.JFrame {
     private void jBPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisaActionPerformed
          String nome = JtNome.getText();
          String cpf = jFCpf.getText();
-         for(int i=0; i < Aluno.size(); i++){
-                System.out.println(nome.toString());
-           }
+         List<Aluno> listaAluno = null;
+         DaoAlunoImpl dao = new DaoAlunoImpl();
+         List<Aluno> listaNova = new ArrayList<>();
+         for(int i=0; i < listaAluno.size(); i++){ 
+             if(listaAluno.get(i).getNome().equals(nome)){
+                        listaNova.add(listaAluno.get(i));
+         }
+             if(listaAluno.get(i).getCpf().equals(cpf)){
+                        listaNova.add(listaAluno.get(i));
+         }
+         }
+         List<Aluno> lista;
+        try {
+            lista = dao.listarAluno();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         jTImprime.setText(listaAluno.toString());
+         
         // TODO add your handling code here:
     }//GEN-LAST:event_jBPesquisaActionPerformed
 
     private void JtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JtNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_JtNomeActionPerformed
+
+    private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
+         String nome = JtNome.getText();
+        String cpf = jFCpf.getText();
+        String endereco = jTEndereco.getText();
+        String pagamento = "";
+        String status ="";
+        for(int i=0; i<2; i++){
+            if(jCoStatus.getSelectedIndex()== 0){
+                status ="Pago";
+            }
+            else
+                status = "Devedor";
+        }
+        this.jBEditar.setSelected(true);
+        
+        JtNome.setText("");
+        jTEmail.setText("");
+        jTEndereco.setText("");
+        jFCpf.setText("");
+        jFTelefone.setText("");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -332,14 +389,14 @@ public class TelaAtualizar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField JtNome;
+    private javax.swing.JButton jBEditar;
     private javax.swing.JButton jBPesquisa;
     private javax.swing.JButton jBsair;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jCoStatus;
     private javax.swing.JFormattedTextField jFCpf;
+    private javax.swing.JFormattedTextField jFTelefone;
     private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -352,9 +409,9 @@ public class TelaAtualizar extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTEmail;
+    private javax.swing.JTextField jTEndereco;
+    private javax.swing.JTextArea jTImprime;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }

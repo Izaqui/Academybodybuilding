@@ -6,6 +6,7 @@
 package telas;
 
 import Entidades.Administrador;
+import Dao.DaoAdmImpl;
 import java.awt.Component;
 
 /**
@@ -85,6 +86,11 @@ public class RegistroAdm extends javax.swing.JFrame {
         jPasswordConfirme.setText("jPasswordField1");
 
         jPasswordSenha.setText("jPasswordField2");
+        jPasswordSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordSenhaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -178,7 +184,7 @@ public class RegistroAdm extends javax.swing.JFrame {
          String email = JTnewEmail.getText();
          String password = jPasswordSenha.getText();
          String passwordCompare = jPasswordConfirme.getText();
-//         try{
+
          if(password == null ? passwordCompare == null : password.equals(passwordCompare)){
              Login obj;       
              obj = new Login();  
@@ -189,6 +195,11 @@ public class RegistroAdm extends javax.swing.JFrame {
          }
 
     }//GEN-LAST:event_Registrado2ActionPerformed
+
+    private void jPasswordSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordSenhaActionPerformed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordSenhaActionPerformed
 
     /**
      * @param args the command line arguments

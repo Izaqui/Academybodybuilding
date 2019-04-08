@@ -129,6 +129,11 @@ public class DaoAlunoImpl implements IDaoAluno {
 
     @Override
     public Aluno buscarAlunoCpf(String cpf) throws IOException, ClassNotFoundException{
+        Iterable<Aluno> listaAluno = null;
+         for(Aluno a : listaAluno){
+            if(a.getCpf().equals(cpf)){
+                return (Aluno) listaAluno;
+            }}
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
