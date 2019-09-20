@@ -21,6 +21,7 @@ public class Login extends javax.swing.JFrame {
 
     /**
      * Creates new form Login
+     * com conecção ao Dao.
      */
     private DaoAdmImpl dao;
     public Login() {

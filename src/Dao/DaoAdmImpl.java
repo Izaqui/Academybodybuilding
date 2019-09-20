@@ -130,6 +130,7 @@ public class DaoAdmImpl implements IDaoAdministrador {
     @Override
     public Administrador buscarAdministrador(String email) throws IOException, ClassNotFoundException {
      for(Administrador a : listarAdministrador()){
+         System.out.println(a.getSenha());
             if(a.getEmail().equals(email))
                 return a;
         }

@@ -255,7 +255,11 @@ public class RegistroAdm extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordConfirme;
     private javax.swing.JPasswordField jPasswordSenha;
     // End of variables declaration//GEN-END:variables
-
+    /*
+    *registrarAdm
+    *Ação para registrar o Administrador do sistema
+    *Solicitação de nome, e-mail, password.
+    */
     private void registrarAdm() throws IOException, ClassNotFoundException {
         String nome = JTAdmCadastroNome.getText();
         String email = JTnewEmail.getText();

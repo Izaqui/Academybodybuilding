@@ -167,6 +167,15 @@ public class TelaAtualizar extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabelaAlunos.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                tabelaAlunosAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         tabelaAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tabelaAlunosMousePressed(evt);
@@ -347,6 +356,10 @@ public class TelaAtualizar extends javax.swing.JFrame {
             Logger.getLogger(TelaAtualizar.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tabelaAlunosAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tabelaAlunosAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelaAlunosAncestorAdded
 
     /**
      * @param args the command line arguments
